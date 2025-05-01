@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Just for You 💖</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #ffe4ec;
+      font-family: 'Quicksand', sans-serif;
+      text-align: center;
+      padding: 50px 20px;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .question-box {
+      background: #f8bbd0;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: auto;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1em;
+      width: 80%;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 15px;
+      background: #f48fb1;
+      color: white;
+      font-weight: 600;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+    }
+
+    .word-reveal {
+      font-family: 'Parisienne', cursive;
+      font-size: 3em;
+      color: #ff69b4;
+      margin: 40px 0;
+      opacity: 0;
+      transform: scale(0.7);
+      animation: popIn 1s forwards;
+    }
+
+    @keyframes popIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    #final-message {
+      font-family: 'Parisienne', cursive;
+      font-size: 3em;
+      color: #ff69b4;
+      margin-top: 60px;
+      display: none;
+      animation: popIn 1s forwards;
+    }
+
+    #continueBtn {
+      display: none;
+      margin-top: 30px;
+      padding: 12px 24px;
+      background-color: #f48fb1;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-weight: 600;
+      font-family: 'Quicksand', sans-serif;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="question-box">
+    <h2 id="question">1. Where did we meet?</h2>
+    <input type="text" id="answer" placeholder="Type your answer..." autocomplete="off" />
+    <br/>
+    <button onclick="checkAnswer()">Submit</button>
+  </div>
+
+  <div id="word" class="word-reveal"></div>
+  <div id="final-message">I Love You So Much</div>
+  <button id="continueBtn" onclick="location.href='page3.html'">Continue →</button>
+
+  <audio id="finalAudio">
+    <source src="assets/final.mp3" type="audio/mp3" />
+  </audio>
+
+  <script>
+    const questions = [
+      { q: "Where did we meet?", a: "rave", word: "I" },
+      { q: "Do you still love me?", a: "yes", word: "Love" },
+      { q: "if i flip a coin What is the probability of me getting head tonight?", a: "you don't need to flip a coin", word: "You" },
+      { q: "Do you have anyone else other than me ykwim", a: "no", word: "So" },
+      { q: "What is the name of the fan page you made for me?", a: "redforroses", word: "Much" }
+    ];
+
+    let current = 0;
+
+    function checkAnswer() {
+      const input = document.getElementById("answer").value.trim().toLowerCase();
+      const correct = questions[current].a.toLowerCase();
+      const isMulti = correct.includes(" or ");
+      
+      const isCorrect = isMulti 
+        ? correct.split(" or ").some(ans => input === ans.trim())
+        : input === correct;
+
+      if (isCorrect) {
+        showWord(questions[current].word);
+        current++;
+        if (current < questions.length) {
+          setTimeout(() => {
+            document.getElementById("word").style.display = "none";
+            document.getElementById("question").textContent = `${current + 1}. ${questions[current].q}`;
+            document.getElementById("answer").value = "";
+          }, 1500);
+        } else {
+          // Finished
+          setTimeout(() => {
+            document.getElementById("word").style.display = "none";
+            showFinalMessage();
+          }, 2000);
+        }
+      } else {
+        alert("Try again, my love 💖");
+      }
+    }
+
+    function showWord(word) {
+      const wordEl = document.getElementById("word");
+      wordEl.textContent = word;
+      wordEl.style.display = "block";
+    }
+
+    function showFinalMessage() {
+      document.getElementById("final-message").style.display = "block";
+      document.getElementById("continueBtn").style.display = "inline-block";
+      document.getElementById("finalAudio").play();
+    }
+  </script>
+
+</body>
+</html>
+
